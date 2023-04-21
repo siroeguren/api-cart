@@ -7,9 +7,10 @@ use App\Cart\Domain\Entity\Cart\CartInterface;
 use App\Cart\Domain\Entity\Cart\CartProducts;
 use App\Cart\Domain\Entity\Cart\CartProductsInterface;
 use App\Cart\Domain\Entity\Cart\ProductInterface;
+use App\Shared\Application\Symfony\CommandHandlerInterface;
 
 
-class DeleteProdFromCartHandler
+class DeleteProdFromCartHandler implements CommandHandlerInterface
 {
 
 

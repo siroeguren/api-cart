@@ -3,21 +3,19 @@
 namespace App\Cart\Infrastructure\Controller;
 
 use App\Cart\Application\Command\AddProductToCartCommand;
-use App\Cart\Application\Command\AddProductToCartHandler;
-use App\Cart\Application\Service\AddToCartService;
 use App\Cart\Domain\CartExceptions\CartExceptions;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Shared\Infrastructure\Services\HandlerEventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AddToCartController extends AbstractController
+class AddToCartController
 {
     /**
      * @throws \Exception
      */
 
-    public function __construct(private readonly AddProductToCartHandler $handler)
+    public function __construct(private readonly HandlerEventDispatcher $handler)
     {
     }
 
@@ -31,7 +29,7 @@ class AddToCartController extends AbstractController
             $quantity = $request->request->get('quantity');
 
             $command = new AddProductToCartCommand($idProduct, 1, $idUser);
-            ($this->handler)($command);
+            $this->handler->dispatchCommand($command);
             // Call the AddProductService to add the product
 
             return new Response('Articulo agregado correctamente, ');

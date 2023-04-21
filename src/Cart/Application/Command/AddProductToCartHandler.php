@@ -11,8 +11,9 @@ use App\Cart\Domain\Entity\Cart\Product;
 use App\Cart\Domain\Entity\Cart\ProductInterface;
 use App\Cart\Domain\Entity\Cart\User;
 use App\Cart\Domain\Entity\Cart\UserInterface;
+use App\Shared\Application\Symfony\CommandHandlerInterface;
 
-class AddProductToCartHandler
+class AddProductToCartHandler implements CommandHandlerInterface
 {
 
     private UserInterface $userInterface;

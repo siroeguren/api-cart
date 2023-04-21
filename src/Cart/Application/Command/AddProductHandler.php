@@ -5,8 +5,9 @@ namespace App\Cart\Application\Command;
 use App\Cart\Domain\Entity\Cart\PriceVO;
 use App\Cart\Domain\Entity\Cart\Product;
 use App\Cart\Domain\Entity\Cart\ProductInterface;
+use App\Shared\Application\Symfony\CommandHandlerInterface;
 
-class AddProductHandler
+class AddProductHandler implements CommandHandlerInterface
 {
     public function __construct(private readonly ProductInterface $prodInterface)
     {
