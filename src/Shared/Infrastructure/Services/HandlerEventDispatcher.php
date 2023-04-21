@@ -7,6 +7,7 @@ namespace App\Shared\Infrastructure\Services;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
+use Throwable;
 
 class HandlerEventDispatcher
 {
@@ -33,7 +34,7 @@ class HandlerEventDispatcher
             $envelope = $bus->dispatch($event);
 
         } catch (HandlerFailedException $e) {
-            $this->proccessBusException($e);
+            $this->processBusException($e);
         }
         return $this->processEnvelope($envelope);
     }
@@ -46,7 +47,10 @@ class HandlerEventDispatcher
         return (is_array($data)) ? $data : (array)$data;
     }
 
-    private function proccessBusException(HandlerFailedException $e): void
+    /**
+     * @throws Throwable
+     */
+    private function processBusException(HandlerFailedException $e): void
     {
         while ($e instanceof HandlerFailedException) {
             /** @var Throwable $e */
