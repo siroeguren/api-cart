@@ -136,6 +136,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/web-token/jwt-key-mgmt" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/web-token/jwt-signature" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/web-token/jwt-signature-algorithm-rsa" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/messenger" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
