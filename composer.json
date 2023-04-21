@@ -19,6 +19,7 @@
         "spomky-labs/lexik-jose-bridge": ">=3.0.2",
         "symfony/apache-pack": "^1.0",
         "symfony/console": "6.2.*",
+        "symfony/doctrine-messenger": "6.2.*",
         "symfony/dotenv": "6.2.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.2.*",
