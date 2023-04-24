@@ -2,10 +2,11 @@
 
 namespace App\Shop\Application\Command;
 
-use App\Cart\Domain\Entity\Cart\Product\PriceVO\PriceVO;
+
 use App\Shared\Application\Symfony\CommandHandlerInterface;
-use App\Shop\Domain\Products\Product;
-use App\Shop\Domain\Products\ProductInterface;
+use App\Shop\Domain\Product\PriceVO\PriceVO;
+use App\Shop\Domain\Product\Product;
+use App\Shop\Domain\Product\ProductInterface;
 
 
 class AddProductCommandHandler implements CommandHandlerInterface

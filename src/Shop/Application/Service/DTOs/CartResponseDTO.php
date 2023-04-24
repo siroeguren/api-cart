@@ -4,7 +4,7 @@ namespace App\Shop\Application\Service\DTOs;
 
 
 use App\Shop\Domain\Cart\Cart;
-use App\Shop\Domain\Products\PriceVO\PriceVO;
+use App\Shop\Domain\Product\PriceVO\PriceVO;
 
 class CartResponseDTO
 {

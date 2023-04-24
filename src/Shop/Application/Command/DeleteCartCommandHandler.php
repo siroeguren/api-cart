@@ -5,8 +5,8 @@ namespace App\Shop\Application\Command;
 
 use App\Shared\Application\Symfony\CommandHandlerInterface;
 use App\Shop\Domain\Cart\Cart;
-use App\Shop\Domain\Cart\CartExceptions\CartExceptions;
 use App\Shop\Domain\Cart\CartInterface;
+use App\Shop\Domain\CartExceptions\CartExceptions;
 
 class DeleteCartCommandHandler implements CommandHandlerInterface
 {

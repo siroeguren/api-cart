@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Shop\Domain\Products\PriceVO;
+namespace App\Shop\Domain\Product\PriceVO;
 
 class PriceVO
 {

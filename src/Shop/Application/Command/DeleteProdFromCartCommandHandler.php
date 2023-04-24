@@ -4,11 +4,11 @@ namespace App\Shop\Application\Command;
 
 
 use App\Shared\Application\Symfony\CommandHandlerInterface;
-use App\Shop\Domain\Cart\CartExceptions\CartExceptions;
 use App\Shop\Domain\Cart\CartInterface;
 use App\Shop\Domain\Cart\CartProducts;
 use App\Shop\Domain\Cart\CartProductsInterface;
-use App\Shop\Domain\Products\ProductInterface;
+use App\Shop\Domain\CartExceptions\CartExceptions;
+use App\Shop\Domain\Product\ProductInterface;
 
 
 class DeleteProdFromCartCommandHandler implements CommandHandlerInterface

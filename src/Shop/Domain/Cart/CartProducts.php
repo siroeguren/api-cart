@@ -2,7 +2,7 @@
 
 namespace App\Shop\Domain\Cart;
 
-use App\Shop\Domain\Products\Product;
+use App\Shop\Domain\Product\Product;
 
 class CartProducts
 {

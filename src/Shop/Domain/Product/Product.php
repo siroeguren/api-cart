@@ -1,10 +1,10 @@
 <?php
 /** @noinspection PhpMultipleClassDeclarationsInspection */
 
-namespace App\Shop\Domain\Products;
+namespace App\Shop\Domain\Product;
 
 
-use App\Shop\Domain\Products\PriceVO\PriceVO;
+use App\Shop\Domain\Product\PriceVO\PriceVO;
 
 class Product
 {

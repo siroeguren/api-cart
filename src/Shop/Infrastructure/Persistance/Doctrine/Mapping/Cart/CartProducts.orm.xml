@@ -11,7 +11,7 @@
         <many-to-one field="cart" target-entity="App\Shop\Domain\Cart\Cart" inversed-by="cart-products">
             <join-column name="cart_id" referenced-column-name="id"/>
         </many-to-one>
-        <many-to-one field="product" target-entity="App\Shop\Domain\Products\Product"
+        <many-to-one field="product" target-entity="App\Shop\Domain\Product\Product"
                      inversed-by="cart-products">
             <join-column name="product_id" referenced-column-name="id"/>
         </many-to-one>

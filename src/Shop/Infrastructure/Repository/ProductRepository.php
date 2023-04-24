@@ -4,8 +4,8 @@
 namespace App\Shop\Infrastructure\Repository;
 
 
-use App\Shop\Domain\Products\Product;
-use App\Shop\Domain\Products\ProductInterface;
+use App\Shop\Domain\Product\Product;
+use App\Shop\Domain\Product\ProductInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

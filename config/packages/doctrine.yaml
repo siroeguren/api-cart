@@ -11,24 +11,26 @@ doctrine:
     naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
     auto_mapping: true
     mappings:
-
       App\src\Shop\Domain\Cart:
         is_bundle: false
         type: xml
-        dir: '%kernel.project_dir%/config/doctrine/mapping'
+        dir: '%kernel.project_dir%/src/Shop/Infrastructure/Persistance/Doctrine/Mapping/Cart'
         prefix: 'App\Shop\Domain\Cart'
-
-      App\src\Shop\Domain\Products:
+      App\src\Shop\Domain\Product:
         is_bundle: false
         type: xml
-        dir: '%kernel.project_dir%/config/doctrine/mapping'
-        prefix: 'App\Shop\Domain\Products'
-
+        dir: '%kernel.project_dir%/src/Shop/Infrastructure/Persistance/Doctrine/Mapping/Product'
+        prefix: 'App\Shop\Domain\Product'
       App\src\Shop\Domain\User:
         is_bundle: false
         type: xml
-        dir: '%kernel.project_dir%/config/doctrine/mapping'
+        dir: '%kernel.project_dir%/src/Shop/Infrastructure/Persistance/Doctrine/Mapping/User'
         prefix: 'App\Shop\Domain\User'
+      App\src\Shop\Domain\Product\PriceVO:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Shop/Infrastructure/Persistance/Doctrine/Mapping/Product/PriceVO'
+        prefix: 'App\Shop\Domain\Product\PriceVO'
 
 when@test:
   doctrine:
