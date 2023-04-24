@@ -1,5 +1,5 @@
 controllers:
   resource:
-    path: ../src/Cart/Infrastructure/Controller/
-    namespace: App\Cart\Infrastructure\Controller
+    path: ../src/Shop/Infrastructure/Controller/
+    namespace: App\Shop\Infrastructure\Controller
   type: attribute

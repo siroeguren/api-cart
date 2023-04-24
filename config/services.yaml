@@ -31,12 +31,12 @@ services:
       - '../src/Entity/'
       - '../src/Kernel.php'
 
-  App\Cart\Infrastructure\Controller\:
-    resource: '../src/Cart/Infrastructure/Controller'
+  App\Shop\Infrastructure\Controller\:
+    resource: '../src/Shop/Infrastructure/Controller'
     tags: [ 'controller.service_arguments' ]
 
-  App\Cart\Infrastructure\Repository\:
-    resource: '../src/Cart/Infrastructure/Repository'
+  App\Shop\Infrastructure\Repository\:
+    resource: '../src/Shop/Infrastructure/Repository'
     tags: [ 'doctrine.repository_service' ]
 
   # add more service definitions when explicit configuration is needed

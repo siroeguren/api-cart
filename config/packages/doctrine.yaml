@@ -12,11 +12,23 @@ doctrine:
     auto_mapping: true
     mappings:
 
-      App\Cart\Domain\Entity\Cart:
+      App\src\Shop\Domain\Cart:
         is_bundle: false
-        dir: '%kernel.project_dir%/config/doctrine/mapping'
-        prefix: 'App\Cart\Domain\Entity\Cart'
         type: xml
+        dir: '%kernel.project_dir%/config/doctrine/mapping'
+        prefix: 'App\Shop\Domain\Cart'
+
+      App\src\Shop\Domain\Products:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/config/doctrine/mapping'
+        prefix: 'App\Shop\Domain\Products'
+
+      App\src\Shop\Domain\User:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/config/doctrine/mapping'
+        prefix: 'App\Shop\Domain\User'
 
 when@test:
   doctrine:
