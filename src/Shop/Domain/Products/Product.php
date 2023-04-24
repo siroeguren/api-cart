@@ -1,7 +1,7 @@
 <?php
 /** @noinspection PhpMultipleClassDeclarationsInspection */
 
-namespace App\Shop\Domain\User;
+namespace App\Shop\Domain\Products;
 
 
 use App\Shop\Domain\Products\PriceVO\PriceVO;

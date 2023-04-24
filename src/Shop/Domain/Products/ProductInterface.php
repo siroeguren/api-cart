@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Shop\Domain\User;
+namespace App\Shop\Domain\Products;
 
-use App\Shop\Domain\Products\Product;
 
 interface ProductInterface
 {
