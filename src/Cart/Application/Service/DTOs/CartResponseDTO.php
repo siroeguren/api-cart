@@ -22,6 +22,7 @@ class CartResponseDTO
                 'unitPrice' => $unitPrice->amount(),
                 'uds' => $uds
             ];
+        return $this->products;
     }
 
     public function getProducts(): array
