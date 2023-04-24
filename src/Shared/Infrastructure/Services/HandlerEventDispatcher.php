@@ -11,7 +11,7 @@ use Throwable;
 
 class HandlerEventDispatcher
 {
-    //////ESTO ES UNA PRUEBA DE CAMBIUO DE BRANCH //////////
+
     public function __construct(
         private readonly MessageBusInterface $queryBus,
         private readonly MessageBusInterface $commandBus
@@ -21,6 +21,7 @@ class HandlerEventDispatcher
 
     public function dispatchCommand($event): array
     {
+        
         return $this->dispatch($event, $this->commandBus);
     }
 

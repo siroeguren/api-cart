@@ -3,7 +3,7 @@
 namespace App\Cart\Infrastructure\Controller;
 
 use App\Cart\Application\Command\AddProductCommand;
-use App\Cart\Application\Command\AddProductHandler;
+use App\Shared\Infrastructure\Services\HandlerEventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,7 +13,7 @@ class AddProdController
 {
 
 
-    public function __construct(private readonly AddProductHandler $handler)
+    public function __construct(private readonly HandlerEventDispatcher $handler)
     {
 
 
@@ -32,7 +32,7 @@ class AddProdController
 
 
         $command = new AddProductCommand($name, $price, $stock);
-        ($this->handler)($command);
+        $this->handler->dispatchCommand($command);
         // Call the AddProductService to add the product
 
         // Return a response, e.g. a success message or a redirect

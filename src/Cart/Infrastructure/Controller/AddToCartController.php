@@ -30,7 +30,6 @@ class AddToCartController
 
             $command = new AddProductToCartCommand($idProduct, 1, $idUser);
             $this->handler->dispatchCommand($command);
-            // Call the AddProductService to add the product
 
             return new Response('Articulo agregado correctamente, ');
         } catch (CartExceptions $e) {

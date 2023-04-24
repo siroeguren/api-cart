@@ -21,15 +21,6 @@ class ShowCartHandler implements QueryHandlerInterface
         $cart = $this->cartInterface->findCartByUserID($query->getIdUser());
         $response = new CartResponseDTO();
 
-        foreach ($cart->getProducts() as $cartProduct) {
-            $response->addProdToCartJsonResponse
-            (
-                $cartProduct->getProduct()->getName(),
-                $cartProduct->getProduct()->getPrice(),
-                $cartProduct->getCount()
-            );
-        }
-
-        return $response;
+        return CartResponseDTO::assemble($cart);
     }
 }

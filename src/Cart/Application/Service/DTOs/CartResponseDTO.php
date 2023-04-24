@@ -2,6 +2,7 @@
 
 namespace App\Cart\Application\Service\DTOs;
 
+use App\Cart\Domain\Entity\Cart\Cart;
 use App\Cart\Domain\Entity\Cart\PriceVO;
 
 class CartResponseDTO
@@ -27,4 +28,20 @@ class CartResponseDTO
     {
         return $this->products;
     }
+
+    public static function assemble(Cart $cart): self
+    {
+        $cartDTO = new self();
+
+        foreach ($cart->getProducts() as $cartProduct) {
+            $cartDTO->addProdToCartJsonResponse
+            (
+                $cartProduct->getProduct()->getName(),
+                $cartProduct->getProduct()->getPrice(),
+                $cartProduct->getCount()
+            );
+        }
+        return $cartDTO;
+    }
+
 }
