@@ -9,6 +9,8 @@ class PriceVO
 
     private float $amount;
 
+    private string $currency;
+
 
     /**
      * @throws \Exception
@@ -17,15 +19,13 @@ class PriceVO
     {
         if (!in_array($currency, self::AVAILABLE_CURRENCY)) {
 
-
             throw new \Exception('Sentimos las molestias, no trabajamos con la moneda');
 
         } else {
 
-            $this->amount = $this->convertCurrencyToEUR($amount, $currency);
-
+            $currencyConverter = new CurrencyConverter();
+            $this->amount = $currencyConverter->convertToEUR($amount, $currency);
         }
-
     }
 
     public function amount(): float
@@ -33,18 +33,9 @@ class PriceVO
         return $this->amount;
     }
 
-    private function convertCurrencyToEUR($amount, $currency)
+    public function currency(): string
     {
-        switch ($currency) {
-            case 'USD' :
-                return $amount * 0.91;
-
-            case 'JPY':
-                return $amount * 0.0068;
-
-            case 'EUR':
-                return $amount;
-        }
+        return $this->currency;
     }
 
 }

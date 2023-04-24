@@ -11,8 +11,12 @@ class User
     public function __construct(string $name, string $email, string $password)
     {
         $this->name = $name;
-        $this->email = $this->checkEmail($email);
-        $this->password = $this->check_pass($password);
+        if ($this->checkEmail($email)) {
+            $this->email = $email;
+        }
+        if ($this->checkPass($password)) {
+            $this->password = $password;
+        }
     }
 
     private int $id;
@@ -58,7 +62,11 @@ class User
 
     public function setEmail(string $email): void
     {
-        $this->email = $email;
+        if ($this->checkEmail($email)) {
+            $this->email = $email;
+        } else {
+            throw new \Exception('No es un email valido');
+        }
     }
 
     public function getPassword(): string
@@ -66,7 +74,7 @@ class User
         return $this->password;
     }
 
-    function check_pass($password): bool
+    function checkPass($password): bool
     {
         $pattern = '/^(?=.*[A-Z])(?=.*[0-9]).+$/';
         return preg_match($pattern, $password) === 1;
@@ -75,7 +83,11 @@ class User
 
     public function setPassword(string $password): void
     {
-        $this->password = $password;
+        if ($this->checkPass($password)) {
+            $this->password = $password;
+        } else {
+            throw new \Exception('Password invalida');
+        }
     }
 
 

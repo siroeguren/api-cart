@@ -14,10 +14,6 @@ class Cart
     /**
      * @param int $id
      */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
 
     private User $user;
 
@@ -57,6 +53,5 @@ class Cart
         $this->products->add($products);
         return $this->products;
     }
-
 
 }

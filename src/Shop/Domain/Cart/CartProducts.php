@@ -12,6 +12,13 @@ class CartProducts
 
     private Product $product;
 
+
+    public function __construct(Cart $cart, Product $product)
+    {
+        $this->cart = $cart;
+        $this->product = $product;
+    }
+
     /**
      * @return Product
      */
@@ -30,12 +37,6 @@ class CartProducts
         return $this->count;
     }
 
-
-    public function __construct(Cart $cart, Product $product)
-    {
-        $this->cart = $cart;
-        $this->product = $product;
-    }
 
     public function getId(): ?int
     {

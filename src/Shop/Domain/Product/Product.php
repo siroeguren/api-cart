@@ -8,6 +8,13 @@ use App\Shop\Domain\Product\PriceVO\PriceVO;
 
 class Product
 {
+    // Constructor
+    public function __construct(string $name, PriceVO $price, int $stock)
+    {
+        $this->name = $name;
+        $this->price = $price;
+        $this->stock = $stock;
+    }
 
     private int $id;
 
@@ -17,28 +24,6 @@ class Product
 
     private PriceVO $price;
 
-    /**
-     * @return PriceVO
-     */
-    public function getPrice(): PriceVO
-    {
-        return $this->price;
-    }
-
-    private int $stock;
-
-    // Constructor
-    public function __construct(string $name, PriceVO $price, int $stock)
-    {
-        $this->name = $name;
-        $this->price = $price;
-        $this->stock = $stock;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getName(): string
     {
@@ -50,6 +35,14 @@ class Product
         $this->name = $name;
     }
 
+    public function getPrice(): PriceVO
+    {
+        return $this->price;
+    }
+
+    private int $stock;
+
+
     public function getStock(): int
     {
         return $this->stock;
@@ -60,5 +53,9 @@ class Product
         $this->stock = $stock;
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
 }
