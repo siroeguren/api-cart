@@ -18,7 +18,7 @@ class PriceVO
         if (!in_array($currency, self::AVAILABLE_CURRENCY)) {
 
 
-            throw new \Exception('Sentimos las molestias, no trabajamos con la moneda : ' . $currency);
+            throw new \Exception('Sentimos las molestias, no trabajamos con la moneda');
 
         } else {
 

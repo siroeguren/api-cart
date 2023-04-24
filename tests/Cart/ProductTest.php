@@ -2,7 +2,18 @@
 
 namespace App\Tests\Cart;
 
-class ProductTest
+use PHPUnit\Framework\TestCase;
+
+class ProductTest extends TestCase
 {
 
+    /**
+     * @test
+     * itShouldThrowException
+     * @group product_test
+     */
+    public function itShouldThrowException(): void
+    {
+        $this->expectException();
+    }
 }
