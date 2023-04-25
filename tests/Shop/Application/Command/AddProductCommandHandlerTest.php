@@ -2,11 +2,24 @@
 
 namespace App\Tests\Shop\Application\Command;
 
-use App\Shop\Domain\Product\Product;
+use App\Shop\Application\Command\AddProductCommand;
+use App\Shop\Application\Command\AddProductCommandHandler;
+use App\Shop\Domain\Product\ProductInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AddProductCommandHandlerTest extends TestCase
 {
+    private AddProductCommandHandler $sut;
+
+    private ProductInterface|MockObject $mockedProdInterface;
+
+
+    protected function setUp(): void
+    {
+        $this->mockedProdInterface = $this->createMock(ProductInterface::class);
+        $this->sut = new AddProductCommandHandler($this->mockedProdInterface);
+    }
 
     /**
      * @test
@@ -16,7 +29,10 @@ class AddProductCommandHandlerTest extends TestCase
      */
     public function testInvoke()
     {
-        $this->assertInstanceOf(Product::class,);
+        $this->expectNotToPerformAssertions();
+        $command = $this->createMock(AddProductCommand::class);
+        $this->sut->__invoke($command);
+
     }
 
 }

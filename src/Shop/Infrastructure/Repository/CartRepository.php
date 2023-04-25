@@ -6,6 +6,7 @@ namespace App\Shop\Infrastructure\Repository;
 
 use App\Shop\Domain\Cart\Cart;
 use App\Shop\Domain\Cart\CartInterface;
+use App\Shop\Domain\CartExceptions\CartExceptions;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -43,7 +44,13 @@ class CartRepository extends ServiceEntityRepository implements CartInterface
             ->where('a.user = :userId')
             ->setParameter('userId', $idUser);
 
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        $cart = $queryBuilder->getQuery()->getOneOrNullResult();
+
+        if ($cart) {
+            return $cart;
+        } else {
+            throw CartExceptions::cartNotFound();
+        }
     }
 
 

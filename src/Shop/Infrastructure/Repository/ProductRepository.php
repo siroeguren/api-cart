@@ -4,6 +4,7 @@
 namespace App\Shop\Infrastructure\Repository;
 
 
+use App\Shop\Domain\CartExceptions\CartExceptions;
 use App\Shop\Domain\Product\Product;
 use App\Shop\Domain\Product\ProductInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -37,9 +38,15 @@ class ProductRepository extends ServiceEntityRepository implements ProductInterf
 
     }
 
-    public function findProductByID($idProduct): Product
+    public function findProductByID($idProduct): ?Product
     {
-        return $this->getEntityManager()->find(Product::class, $idProduct);
+        $prod = $this->getEntityManager()->find(Product::class, $idProduct);
+
+        if ($prod) {
+            return $prod;
+        } else {
+            throw CartExceptions::productNotFound();
+        }
 
     }
 }

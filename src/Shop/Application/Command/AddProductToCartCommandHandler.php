@@ -65,7 +65,7 @@ class AddProductToCartCommandHandler implements CommandHandlerInterface
             $this->cartProductsInterface->flushCartProducts();
 
         } else {
-            $cartProducts = new CartProducts($cart, $product);
+            $cartProducts = new CartProducts($cart, $product, 0);
             $cartProducts->setCountPlus();
             $cart->getProducts()->add($cartProducts);
             $this->cartInterface->saveCart($cart);
@@ -90,7 +90,7 @@ class AddProductToCartCommandHandler implements CommandHandlerInterface
      */
     private function guardUserByID(int $userID): User
     {
-        $user = $this->userInterface->find($userID);
+        $user = $this->userInterface->findUserByID($userID);
         if (!$user) {
             throw CartExceptions::userNotFound();
         } else {
@@ -105,7 +105,7 @@ class AddProductToCartCommandHandler implements CommandHandlerInterface
             return false;
         } else {
             return true;
-        };
+        }
     }
 
     private function retrieveCart(int $userID): Cart

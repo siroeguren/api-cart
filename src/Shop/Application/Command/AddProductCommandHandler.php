@@ -19,7 +19,7 @@ class AddProductCommandHandler implements CommandHandlerInterface
     /**
      * @throws \Exception
      */
-    public function __invoke(AddProductCommand $command)
+    public function __invoke(AddProductCommand $command): void
     {
         $randomCurrencies = ['EUR', 'USD', 'YEN'];
         // Create a new Product entity
@@ -28,8 +28,6 @@ class AddProductCommandHandler implements CommandHandlerInterface
 
         // Persist the Product entity to the database
         $this->prodInterface->saveProduct($product);
-
-        return $product;
     }
 
 
