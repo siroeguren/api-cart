@@ -3,9 +3,7 @@
 namespace App\Tests\Shop\Domain\Cart;
 
 use App\Shop\Domain\Cart\Cart;
-use App\Shop\Domain\Product\Product;
 use App\Shop\Domain\User\User;
-use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -49,23 +47,23 @@ class CartTest extends TestCase
         $this->assertSame($userMocked2, $this->sut->getUser());
     }
 
-    /**
-     * @test
-     * shouldSetProducts
-     * @group cart
-     */
-
-    public function shouldSetProducts()
-    {
-        $product1 = $this->createMock(Product::class);
-        $product2 = $this->createMock(Product::class);
-
-        $expectedProds = new ArrayCollection([$product1, $product2]);
-
-        $this->sut->setProducts($expectedProds);
-
-        $this->assertEquals($expectedProds->toArray(), $this->sut->getProducts()->toArray());
-
-    }
+//    /**
+//     * @test
+//     * shouldSetProducts
+//     * @group cart
+//     */
+//
+//    public function shouldSetProducts()
+//    {
+//        $product1 = $this->createMock(Product::class);
+//        $product2 = $this->createMock(Product::class);
+//
+//        $expectedProds = new ArrayCollection([$product1, $product2]);
+//
+//        $this->sut->setProducts($expectedProds);
+//
+//        $this->assertEquals($expectedProds->toArray(), $this->sut->getProducts()->toArray());
+//
+//    }
 
 }

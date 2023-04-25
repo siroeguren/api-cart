@@ -21,13 +21,13 @@ class AddProductCommandHandler implements CommandHandlerInterface
      */
     public function __invoke(AddProductCommand $command)
     {
-        $randomCurrencies = ['EUR', 'USD', 'YEN', 'DSAD', 'qnwebnqwe'];
+        $randomCurrencies = ['EUR', 'USD', 'YEN'];
         // Create a new Product entity
         $product = new Product($command->getName(), new PriceVO($command->getPrice(),
             $randomCurrencies[array_rand($randomCurrencies)]), $command->getStock());
 
         // Persist the Product entity to the database
-        $this->prodInterface->saveProduct($product, true);
+        $this->prodInterface->saveProduct($product);
 
         return $product;
     }

@@ -10,24 +10,18 @@ class CartProducts
 
     private Cart $cart;
 
+
     private Product $product;
 
+    private ?int $count = null;
 
-    public function __construct(Cart $cart, Product $product)
+    public function __construct(Cart $cart, Product $product, int $count)
     {
         $this->cart = $cart;
         $this->product = $product;
+        $this->count = $count;
     }
 
-    /**
-     * @return Product
-     */
-    public function getProduct(): Product
-    {
-        return $this->product;
-    }
-
-    private ?int $count = null;
 
     /**
      * @return int|null
@@ -38,21 +32,6 @@ class CartProducts
     }
 
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getCartId(): ?int
-    {
-        return $this->cart->Id();
-    }
-
-    public function getProductId(): ?int
-    {
-        return $this->product->getId();
-    }
-
     public function setCountMinus(): void
     {
         $this->count--;
@@ -61,5 +40,37 @@ class CartProducts
     public function setCountPlus(): void
     {
         $this->count++;
+    }
+
+    /**
+     * @return Cart
+     */
+    public function getCart(): Cart
+    {
+        return $this->cart;
+    }
+
+    /**
+     * @param Cart $cart
+     */
+    public function setCart(Cart $cart): void
+    {
+        $this->cart = $cart;
+    }
+
+    /**
+     * @return Product
+     */
+    public function getProduct(): Product
+    {
+        return $this->product;
+    }
+
+    /**
+     * @param Product $product
+     */
+    public function setProduct(Product $product): void
+    {
+        $this->product = $product;
     }
 }

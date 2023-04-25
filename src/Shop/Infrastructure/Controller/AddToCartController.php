@@ -22,6 +22,7 @@ class AddToCartController
     #[Route('/addToCart', name: 'addToCart', methods: ['POST'])]
     public function addProductToCart(Request $request): Response
     {
+
         try {
             // Retrieve data from the request
             $idUser = $request->request->get('idUser');
