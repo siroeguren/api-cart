@@ -2,6 +2,9 @@
 
 namespace App\Shop\Domain\Product\PriceVO;
 
+use App\Shop\Domain\Product\PriceVO\Service\CurrencyConverter;
+use App\Shop\Domain\Product\PriceVO\Service\CurrencyConverterExceptions;
+
 class PriceVO
 {
 
@@ -19,7 +22,7 @@ class PriceVO
     {
         if (!in_array($currency, self::AVAILABLE_CURRENCY)) {
 
-            throw new \Exception('Sentimos las molestias, no trabajamos con la moneda');
+            throw  CurrencyConverterExceptions::CurrencyNotFound();
 
         } else {
 

@@ -2,6 +2,7 @@
 
 namespace App\Tests\Shop\Application\Command;
 
+use App\Shop\Domain\Product\Product;
 use PHPUnit\Framework\TestCase;
 
 class AddProductCommandHandlerTest extends TestCase
@@ -15,7 +16,7 @@ class AddProductCommandHandlerTest extends TestCase
      */
     public function testInvoke()
     {
-
+        $this->assertInstanceOf(Product::class,);
     }
 
 }

@@ -34,7 +34,7 @@ class AddToCartController
 
             return new Response('Articulo agregado correctamente, ');
         } catch (CartExceptions $e) {
-            return new Response('Articulo agregado qweqweqweqweqweqweqedqdsa, ');
+            return new Response('Error al agregar articulo, ');
         }
     }
 }

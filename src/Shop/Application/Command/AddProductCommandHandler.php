@@ -31,4 +31,6 @@ class AddProductCommandHandler implements CommandHandlerInterface
 
         return $product;
     }
+
+
 }
