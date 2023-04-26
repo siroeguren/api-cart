@@ -179,6 +179,10 @@ La estructura de una aplicación Symfony es flexible, pero se recomienda la sigu
 
 ## 5.1 Ejemplo de mapeo con doctrine de la entidad User.
 
+<img src="readme_rsc/mapping_structure.png"> <br><br>
+
+
+
 User.orm.xml
 
 ```xml
@@ -263,4 +267,149 @@ orm:
 
 `bin/console doctrine:migrations:migrate` para realizar las migraciones y construir la base de datos
 
+## 5. Funcionamiento API.
+
+###### La api recibe peticiones de tipo POST, DELETE,Y GET :
+
+* Añadir producto al carrito
+* Borrar carrito
+* Borrar producto de un carrito
+* Añadir producto
+
+### En primer lugar, la peticion llega al controlador correspondiente :
+
+* ##### En este caso los parametros son introducidos al metodo mediante la request, pero tambien pueden ir en el body de la request en otro controlador
+
+```php
+#[Route('/addToCart', name: 'addToCart', methods: ['POST'])]
+public function addProductToCart(Request $request): Response
+{
+
+        try {
+            $idUser = $request->request->get('idUser');
+            $idProduct = $request->request->get('idProduct');
+            $quantity = $request->request->get('quantity');
+
+            $command = new AddProductToCartCommand($idProduct, 1, $idUser);
+            $this->handler->dispatchCommand($command);
+
+            return new Response('Articulo agregado correctamente, ');
+        } catch (CartExceptions $e) {
+            return new Response('Error al agregar articulo, ');
+        }
+    }
+```
+
+### Se crea un objeto de tipo command que almacena los datos necesarios para el caso de uso( El objeto de tipo command no es mas que un objeto creado a mano que tiene como atributos los parametros necesarios para llevar a cabo el caso de uso )
+
+```php
+class AddProductToCartCommand
+{
+  public function __construct
+  (
+    private readonly int $productID,
+    private readonly int $count,
+    private readonly int $userID
+  )
+   {}
+```
+
+### + Getters y setters necesarios
+
+### En la carpeta Shared se encuentra, debajo de Application/Symfony :
+
+* #### Un CommandHandlerInterface
+* #### Un QueryHandlerInterface
+
+### Ambas clases totalmente vacias (utilizadas respetar Hexagonal DDD)
+
+```php
+$command = new AddProductToCartCommand($idProduct, 1, $idUser);
+$this->handler->dispatchCommand($command);
+```
+
+### El metodo dispatchCommand es llamado mediante la interfaz mencionada :
+
+```php
+public function dispatchCommand($event): array
+{
+  return $this->dispatch($event, $this->commandBus);
+}
+```
+
+###### Con la configuracion que hicimos con symfony messenger este metodo sabra que CommandHandler tiene que utilizar para ejecutar ese Command. Puesto que nuestros CommandHandlers extienden la interfaz vacia, configurada para todo lo que haga instancia de ella sepa manejarse con el ComnmandBus o QueryBus.
+
+#### Fichero de configuracion services.yaml
+
+```yaml
+services:
+  # default configuration for services in *this* file
+  _defaults:
+  autowire: true      # Automatically injects dependencies in your services.
+  autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+  _instanceof:
+    # all services implementing the CommandHandlerInterface
+    # will be registered on the command.bus bus
+    App\Shared\Application\Symfony\CommandHandlerInterface:
+      tags:
+        - { name: messenger.message_handler, bus: command.bus }
+
+        # while those implementing QueryHandlerInterface will be
+        # registered on the query.bus bus
+    App\Shared\Application\Symfony\QueryHandlerInterface:
+      tags:
+        - { name: messenger.message_handler, bus: query.bus }
+```
+
 ## 5. Test Unitarios
+
+#### La estructura de los test unitarios no es necesario que sea identica a la de nuestras clases a testear en el proyecto, pero si recomendable (supongo) , de manera que replicaremos la estructura de las clases de nuestro proyecto, creando un Clase Test por cada clase y caso de uso a testear:
+
+<img src = "readme_rsc/tests_structure.png"/>
+
+## 5.1 Ejemplo de testeo de una clase :
+
+```php
+class CartTest extends TestCase
+{
+private Cart $sut;
+private User|MockObject $mockedUser;
+
+    protected function setUp(): void
+    {
+        $this->mockedUser = $this->createMock(User::class);
+
+        $this->sut = new Cart($this->mockedUser);
+    }
+
+    /**
+     * @test
+     * shouldGetProperUser
+     * @group cart
+     */
+    public function shouldGetProperUser()
+    {
+        $this->assertInstanceOf(User::class, $this->sut->getUser());
+    }
+
+    /**
+     * @test
+     * shouldSetProperUser
+     * @group cart
+     */
+    public function shouldSetProperUser()
+    {
+        $userMocked2 = $this->createConfiguredMock(User::class,
+            [
+                'getName' => 'TestUsername',
+                'getEmail' => 'testUsername@user.com',
+                'getPassword' => 'Pass2Test',
+            ]);
+
+        $this->sut->setUser($userMocked2);
+        $this->assertSame($userMocked2, $this->sut->getUser());
+    }
+}
+```
+
+#### En este Test
