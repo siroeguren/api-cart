@@ -10,7 +10,5 @@ RUN docker-php-ext-install pdo_mysql
 RUN composer require symfony/apache-pack
 RUN composer require --dev symfony/phpunit-bridge
 RUN composer require --dev phpunit/phpunit
-#RUN composer require guzzlehttp/guzzle
-#RUN composer require symfony/security-bundle
 COPY ./docker/000-default.conf /etc/apache2/sites-available/000-default.conf
 WORKDIR /var/www/html

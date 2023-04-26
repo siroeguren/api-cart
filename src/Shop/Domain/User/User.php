@@ -2,21 +2,19 @@
 
 namespace App\Shop\Domain\User;
 
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Validation;
+
+use App\Shop\Domain\User\VOs\EmaiLVO;
+use App\Shop\Domain\User\VOs\PassVO;
 
 class User
 {
     // Constructor
-    public function __construct(string $name, string $email, string $password)
+    public function __construct(string $name, EmailVO $email, PassVO $password)
     {
         $this->name = $name;
-        if ($this->checkEmail($email)) {
-            $this->email = $email;
-        }
-        if ($this->checkPass($password)) {
-            $this->password = $password;
-        }
+        $this->email = $email;
+        $this->password = $password;
+
     }
 
     private int $id;
@@ -25,10 +23,11 @@ class User
     private string $name;
 
 
-    private string $email;
+    private EmailVO $email;
 
 
-    private string $password;
+    private PassVO $password;
+
 
     public function getId(): ?int
     {
@@ -45,50 +44,24 @@ class User
         $this->name = $name;
     }
 
-    public function getEmail(): string
+    public function getEmail(): EmailVO
     {
         return $this->email;
     }
 
-
-    function checkEmail($email)
+    public function setEmail(EmailVO $email): void
     {
-        $validator = Validation::createValidator();
-        $emailConstraint = new Email();
-        $violations = $validator->validate($email, $emailConstraint);
-
-        return count($violations) === 0;
+        $this->email = $email;
     }
 
-    public function setEmail(string $email): void
-    {
-        if ($this->checkEmail($email)) {
-            $this->email = $email;
-        } else {
-            throw new \Exception('No es un email valido');
-        }
-    }
-
-    public function getPassword(): string
+    public function getPassword(): PassVO
     {
         return $this->password;
     }
 
-    function checkPass($password): bool
+    public function setPassword(PassVO $password): void
     {
-        $pattern = '/^(?=.*[A-Z])(?=.*[0-9]).+$/';
-        return preg_match($pattern, $password) === 1;
+        $this->password = $password;
     }
-
-
-    public function setPassword(string $password): void
-    {
-        if ($this->checkPass($password)) {
-            $this->password = $password;
-        } else {
-            throw new \Exception('Password invalida');
-        }
-    }
-
 
 }

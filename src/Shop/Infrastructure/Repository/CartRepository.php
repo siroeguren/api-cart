@@ -46,7 +46,7 @@ class CartRepository extends ServiceEntityRepository implements CartInterface
             ->setParameter('userId', $idUser);
 
         $cart = $queryBuilder->getQuery()->getOneOrNullResult();
-        
+
         if ($cart) {
             return $cart;
         } else {
