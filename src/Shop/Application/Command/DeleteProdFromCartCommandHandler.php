@@ -35,9 +35,7 @@ class DeleteProdFromCartCommandHandler implements CommandHandlerInterface
         $this->checkProdExistence($command->getProductID());
         $cartProduct = $this->checkCartProdExistence($command->getCartID(), $command->getProductID());
 
-        if ($cartProd
-### Doctrine :
-uct->getCount() == 1) {
+        if ($cartProduct->getCount() == 1) {
             $this->cartProductsInterface->removeCartProduct($cartProduct);
         } else if ($cartProduct->getCount() > 1) {
             $cartProduct->setCountMinus();
