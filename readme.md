@@ -4,10 +4,19 @@
 
 * [Siroko Api Carrito](#siroko-api-carrito)
     * [1. Instalación de Symfony desde cero](#1-instalación-de-symfony-desde-cero)
+        * [Install php 8.1 via :](#install-php-81-via-)
+        * [Install Docker Engine](#install-docker-engine)
     * [2. Dependencias utilizadas](#2-dependencias-utilizadas)
     * [3. Configuracion framework](#3-configuracion-framework)
-    * [4. Como hemos modelado la estructura (bounded context, domain, application, infrastrucure)](#4-como-hemos-modelado-la-estructura-bounded-context-domain-application-infrastrucure)
-    * [5. Test Unitarios](#5-test-unitarios)
+        * [3.1 Configuracion docker](#31-configuracion-docker)
+
+    * [4. Estructura de proyecto](#4-estructura-de-proyecto)
+    * [5. Clases y Doctrine.](#5-clases-y-doctrine)
+        * [5.1 Ejemplo de mapeo con doctrine de la entidad User.](#51-ejemplo-de-mapeo-con-doctrine-de-la-entidad-user)
+    * [6. Funcionamiento API.](#6-funcionamiento-api)
+    * [7. Test Unitarios](#7-test-unitarios)
+        * [7.1 Ejemplo de testeo de una clase :](#71-ejemplo-de-testeo-de-una-clase-)
+        * [7.2 Ejemplo de testeo de un caso de uso.](#72-ejemplo-de-testeo-de-un-caso-de-uso)
 
 <!-- TOC -->
 
@@ -267,7 +276,7 @@ orm:
 
 `bin/console doctrine:migrations:migrate` para realizar las migraciones y construir la base de datos
 
-## 5. Funcionamiento API.
+## 6. Funcionamiento API.
 
 ###### La api recibe peticiones de tipo POST, DELETE,Y GET :
 
@@ -361,13 +370,13 @@ services:
         - { name: messenger.message_handler, bus: query.bus }
 ```
 
-## 5. Test Unitarios
+## 7. Test Unitarios
 
 #### La estructura de los test unitarios no es necesario que sea identica a la de nuestras clases a testear en el proyecto, pero si recomendable (supongo) , de manera que replicaremos la estructura de las clases de nuestro proyecto, creando un Clase Test por cada clase y caso de uso a testear:
 
 <img src = "readme_rsc/tests_structure.png"/>
 
-## 5.1 Ejemplo de testeo de una clase :
+## 7.1 Ejemplo de testeo de una clase :
 
 ```php
 class CartTest extends TestCase
@@ -402,8 +411,14 @@ private User|MockObject $mockedUser;
         $userMocked2 = $this->createConfiguredMock(User::class,
             [
                 'getName' => 'TestUsername',
-                'getEmail' => 'testUsername@user.com',
-                'getPassword' => 'Pass2Test',
+                'getEmail' => $this->createConfiguredMock(EmailVO::class,
+                    [
+                        'getAddress' => 'testemail@email.com'
+                    ]),
+                'getPassword' => $this->createConfiguredMock(PasswordVO::class,
+                    [
+                        'getPassword' => 'Pass2Test'
+                    ]),
             ]);
 
         $this->sut->setUser($userMocked2);
@@ -412,5 +427,95 @@ private User|MockObject $mockedUser;
 }
 ```
 
-#### En este Test nos encargamos de probar la funcionalidad de los metodos de la clase Cart
+#### En este Test nos encargamos de probar la funcionalidad de los metodos de la clase Cart, comprobando que ambos metodos devuelvan tanto una instancia de la clase cart, como que seteen de manera correcta este usuario.
 
+## 7.2 Ejemplo de testeo de un caso de uso.
+
+```php
+<?php
+
+namespace App\Tests\Shop\Application\Command;
+
+use App\Shop\Application\Command\DeleteCartCommand;
+use App\Shop\Application\Command\DeleteCartCommandHandler;
+use App\Shop\Domain\Cart\Cart;
+use App\Shop\Domain\Cart\CartInterface;
+use App\Shop\Domain\CartExceptions\CartExceptions;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DeleteCartCommandHandlerTest extends TestCase
+{
+    private DeleteCartCommandHandler $sut;
+
+    private CartInterface|MockObject $cartInterface;
+
+    protected function setUp(): void
+    {
+        $this->cartInterface = $this->createConfiguredMock(CartInterface::class,
+            [
+                'findCartByID' => $this->createMock(Cart::class)
+            ]);
+        $this->sut = new DeleteCartCommandHandler($this->cartInterface);
+    }
+
+    /**
+     * @test
+     * shouldDeleteCart
+     * @group delete_cart
+     */
+    public function shouldDeleteCart()
+    {
+        $this->expectNotToPerformAssertions();
+        $command = $this->createConfiguredMock(DeleteCartCommand::class,
+            [
+                'getCartID' => 1
+            ]);
+        $this->sut->__invoke($command);
+    }
+
+    /**
+     * @test
+     * shouldGiveCartNotFoundException
+     * @group delete_cart
+     */
+    public function shouldGiveCartNotFoundException()
+    {
+        $this->expectException(CartExceptions::class);
+        $cartInterface = $this->createMock(CartInterface::class);
+        $newSut = new DeleteCartCommandHandler($cartInterface);
+        $newSut->__invoke($this->createMock(DeleteCartCommand::class));
+    }
+
+}
+```
+
+### En este Test probamos el caso de uso deleteCart, en este caso el metodo __invoke() es void, por lo que no tiene return, para testear metodos de este tipo se utiliza
+
+`$this->expectNotToPerformAssertions();`
+
+### Para ejecutar todos los test a la vez utiliza :
+
+`vendor/bin/phpunit`
+
+### Para ejecutar tests de una sola clase es necesario definir un grupo de esta manera encima de la funcion a ejecutar
+
+```php
+
+/**
+* @test
+* shouldGiveCartNotFoundException
+* @group delete_cart
+*/
+public function shouldGiveCartNotFoundException()
+{
+  $this->expectException(CartExceptions::class);
+  $cartInterface = $this->createMock(CartInterface::class);
+  $newSut = new DeleteCartCommandHandler($cartInterface);
+  $newSut->__invoke($this->createMock(DeleteCartCommand::class));
+}
+```
+
+##### Esto nos indica que el grupo al que pertenece este test, y otros que queramos asignar de la misma manera es delete_cart
+
+`vendor/bin/phpunit --group delete_cart`
