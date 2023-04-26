@@ -177,4 +177,90 @@ La estructura de una aplicación Symfony es flexible, pero se recomienda la sigu
 
 ##### Hay diferentes maneras de mapear entidades en doctrine, como por ejemplo anotaciones y XML, en este caso utilizaremos XML ya que deja el codigo de la clase mas limpio aunque ambas son totalmente validas
 
+## 5.1 Ejemplo de mapeo con doctrine de la entidad User.
+
+User.orm.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="App\Shop\Domain\User\User" table="`user`"
+            repository-class="App\Shop\Infrastructure\Repository\UserRepository">
+        <id name="id" type="integer">
+            <generator strategy="AUTO"/>
+        </id>
+        <field name="name" type="string" length="255"/>
+        <embedded name="email" class="App\Shop\Domain\User\EmailVO" use-column-prefix="false"/>
+        <embedded name="password" class="App\Shop\Domain\User\PasswordVO" use-column-prefix="false"/>
+    </entity>
+</doctrine-mapping>
+```
+
+EmailVO.orm.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <embeddable name="App\Shop\Domain\User\EmailVO">
+        <field name="address" column="address" type="string"/>
+    </embeddable>
+</doctrine-mapping>
+```
+
+PasswordVO.orm.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <embeddable name="App\Shop\Domain\User\PasswordVO">
+        <field name="password" column="password" type="string"/>
+    </embeddable>
+
+</doctrine-mapping>
+```
+
+### Fichero doctrine.yaml, cabe destacar que cada directiva de este fichero corresponde al mapeo de una carpeta, y no de un fichero unico, la INDENTACION tambien es clave.
+
+```yaml
+orm:
+  auto_generate_proxy_classes: true
+  enable_lazy_ghost_objects: true
+  naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+  auto_mapping: true
+  mappings:
+    App\src\Shop\Domain\Cart:
+      is_bundle: false
+      type: xml
+      dir: '%kernel.project_dir%/src/Shop/Infrastructure/Persistance/Doctrine/Mapping/Cart'
+      prefix: 'App\Shop\Domain\Cart'
+    App\src\Shop\Domain\Product:
+      is_bundle: false
+      type: xml
+      dir: '%kernel.project_dir%/src/Shop/Infrastructure/Persistance/Doctrine/Mapping/Product'
+      prefix: 'App\Shop\Domain\Product'
+    App\src\Shop\Domain\User:
+      is_bundle: false
+      type: xml
+      dir: '%kernel.project_dir%/src/Shop/Infrastructure/Persistance/Doctrine/Mapping/User'
+      prefix: 'App\Shop\Domain\User'
+    App\src\Shop\Domain\Product\PriceVO:
+      is_bundle: false
+      type: xml
+      dir: '%kernel.project_dir%/src/Shop/Infrastructure/Persistance/Doctrine/Mapping/Product/PriceVO'
+      prefix: 'App\Shop\Domain\Product\PriceVO'
+```
+
+#### Despues de configurar las clases y los mapeos, utilizar comando `php bin/console make:migration` y
+
+`bin/console doctrine:migrations:migrate` para realizar las migraciones y construir la base de datos
+
 ## 5. Test Unitarios
