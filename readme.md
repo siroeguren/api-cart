@@ -412,4 +412,5 @@ private User|MockObject $mockedUser;
 }
 ```
 
-#### En este Test
+#### En este Test nos encargamos de probar la funcionalidad de los metodos de la clase Cart
+
