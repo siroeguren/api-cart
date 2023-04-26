@@ -11,6 +11,7 @@ use Throwable;
 
 class HandlerEventDispatcher
 {
+
     public function __construct(
         private readonly MessageBusInterface $queryBus,
         private readonly MessageBusInterface $commandBus
@@ -20,6 +21,7 @@ class HandlerEventDispatcher
 
     public function dispatchCommand($event): array
     {
+        
         return $this->dispatch($event, $this->commandBus);
     }
 
