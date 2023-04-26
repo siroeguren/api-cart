@@ -25,9 +25,8 @@ class DeleteCartCommandHandler implements CommandHandlerInterface
      */
     public function __invoke(DeleteCartCommand $command): void
     {
-
-        $this->checkCartExistence($command->getCartID());
-        $cart = $this->checkCartExistence($command->getCartID());
+        $cart = $this->cartInterface->findCartByID($command->getCartID());
+        $this->checkCartExistence($cart);
         $this->cartInterface->removeCart($cart);
 
     }
@@ -35,9 +34,11 @@ class DeleteCartCommandHandler implements CommandHandlerInterface
     /**
      * @throws CartExceptions
      */
-    private function checkCartExistence(int $cartID): ?Cart
+    private function checkCartExistence(?Cart $cart): void
     {
-        return $this->cartInterface->findCartByID($cartID) ?: $this->throwCartExistsException();
+        if (!$cart) {
+            $this->throwCartExistsException();
+        }
     }
 
     /**

@@ -11,10 +11,6 @@ class Cart
 
     private int $id;
 
-    /**
-     * @param int $id
-     */
-
     private User $user;
 
     private Collection $products;
@@ -26,9 +22,17 @@ class Cart
         $this->products = new ArrayCollection();
     }
 
-    public function Id(): int
+    public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getUser(): User
@@ -53,5 +57,6 @@ class Cart
         $this->products->add($products);
         return $this->products;
     }
+
 
 }

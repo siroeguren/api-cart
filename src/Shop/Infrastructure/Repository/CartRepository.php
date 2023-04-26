@@ -33,6 +33,7 @@ class CartRepository extends ServiceEntityRepository implements CartInterface
 
     /**
      * @throws NonUniqueResultException
+     * @throws CartExceptions
      */
     public function findCartByUserID($idUser): ?Cart
     {
@@ -45,7 +46,7 @@ class CartRepository extends ServiceEntityRepository implements CartInterface
             ->setParameter('userId', $idUser);
 
         $cart = $queryBuilder->getQuery()->getOneOrNullResult();
-
+        
         if ($cart) {
             return $cart;
         } else {
@@ -54,9 +55,18 @@ class CartRepository extends ServiceEntityRepository implements CartInterface
     }
 
 
-    public function findCartByID($idCart): Cart
+    public function findCartByID($idCart): ?Cart
     {
-        return $this->getEntityManager()->find(Cart::class, $idCart);
+        $cart = $this->getEntityManager()->find(Cart::class, $idCart);
+        if ($cart) {
+            return $cart;
+        } else {
+            throw CartExceptions::cartNotFound();
+        }
+    }
 
+    public function getId(): int
+    {
+        // TODO: Implement getId() method.
     }
 }

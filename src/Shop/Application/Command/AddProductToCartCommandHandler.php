@@ -11,7 +11,6 @@ use App\Shop\Domain\Cart\CartProductsInterface;
 use App\Shop\Domain\CartExceptions\CartExceptions;
 use App\Shop\Domain\Product\Product;
 use App\Shop\Domain\Product\ProductInterface;
-use App\Shop\Domain\User\User;
 use App\Shop\Domain\User\UserInterface;
 
 class AddProductToCartCommandHandler implements CommandHandlerInterface
@@ -41,30 +40,27 @@ class AddProductToCartCommandHandler implements CommandHandlerInterface
      */
     public function __invoke(AddProductToCartCommand $command): void
     {
-        $userID = $command->getUserID();
-        $product = $this->guardProductByID($command->getProductID());
+        $product = $this->prodInterface->findProductByID($command->getProductID());
+        $this->guardProduct($product);
 
-        //Comprueba que el carrito existe, si es asi, lo recupera.
-        //Si no existe crea un carrittto nuevo asociado al ID de usuario
-        if ($this->cartExists($userID)) {
+        $cart = $this->cartInterface->findCartByUserID($command->getUserID());
 
-            $cart = $this->retrieveCart($command->getUserID());
 
-        } else {
-            $cart = new Cart($this->guardUserByID($command->getUserID()));
+        if (!$cart) {
+
+            $user = $this->userInterface->findUserByID($command->getUserID());
+            $cart = new Cart($user);
             $this->cartInterface->saveCart($cart);
         }
 
-        //Comprueba que el producto exista en el carrito, si existe suma 1 al count de ese produco
-        //Si no existe procede a crear un cartProduct y a setear su count a 1.
-        if ($this->checkProdInCartExistence($command->getProductID(), $cart->Id())) {
+        $prodInCart = $this->cartProductsInterface->findCartProductByCartAndProductID($cart->getId(), $command->getProductID());
+        if ($prodInCart) {
 
-            $cartProd = $this->cartProductsInterface
-                ->findCartProductByCartAndProductID($cart->Id(), $command->getProductID());
-            $cartProd->setCountPlus();
+            $prodInCart->setCountPlus();
             $this->cartProductsInterface->flushCartProducts();
 
         } else {
+
             $cartProducts = new CartProducts($cart, $product, 0);
             $cartProducts->setCountPlus();
             $cart->getProducts()->add($cartProducts);
@@ -75,43 +71,40 @@ class AddProductToCartCommandHandler implements CommandHandlerInterface
     /**
      * @throws CartExceptions
      */
-    private function guardProductByID(int $productID): Product
+    private function guardProduct(?Product $prod): void
     {
-        $prod = $this->prodInterface->findProductByID($productID);
         if (!$prod) {
             throw CartExceptions::productNotFound();
-        } else {
-            return $prod;
         }
     }
 
-    /**
-     * @throws CartExceptions
-     */
-    private function guardUserByID(int $userID): User
-    {
-        $user = $this->userInterface->findUserByID($userID);
-        if (!$user) {
-            throw CartExceptions::userNotFound();
-        } else {
-            return $user;
-        };
-
-    }
-
-    private function cartExists(int $userID): bool
-    {
-        if (!$this->cartInterface->findCartByUserID($userID)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    private function retrieveCart(int $userID): Cart
-    {
-        return $this->cartInterface->findCartByUserID($userID);
-    }
+//    /**
+//     * @throws CartExceptions
+//     */
+//    private function guardUserByID(int $userID): User
+//    {
+//        $user = $this->userInterface->findUserByID($userID);
+//        if (!$user) {
+//            throw CartExceptions::userNotFound();
+//        } else {
+//            return $user;
+//        };
+//
+//    }
+//
+//    private function cartExists(int $userID): bool
+//    {
+//        if (!$this->cartInterface->findCartByUserID($userID)) {
+//            return false;
+//        } else {
+//            return true;
+//        }
+//    }
+//
+//    private function retrieveCart(int $userID): Cart
+//    {
+//        return $this->cartInterface->findCartByUserID($userID);
+//    }
 
     private function checkProdInCartExistence(int $idProd, int $idCart): bool
     {

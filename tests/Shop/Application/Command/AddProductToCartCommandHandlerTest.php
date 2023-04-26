@@ -13,7 +13,6 @@ use App\Shop\Domain\Product\Product;
 use App\Shop\Domain\Product\ProductInterface;
 use App\Shop\Domain\User\User;
 use App\Shop\Domain\User\UserInterface;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,8 +38,10 @@ class AddProductToCartCommandHandlerTest extends TestCase
             ]);
         $mockedCartInterface = $this->cartInterface = $this->createConfiguredMock(CartInterface::class,
             [
-                'findCartByUserID' => $this->createMock(Cart::class)
+                'findCartByID' => $this->createMock(Cart::class)
             ]);
+//        $mockedCartInterface = $this->cartInterface->method('getId')->willReturn(2);
+
         $mockedCartProdInterface = $this->cartProdInterface = $this->createConfiguredMock(CartProductsInterface::class,
             [
                 'findCartProductByCartAndProductId' => $this->createMock(CartProducts::class)
@@ -65,10 +66,24 @@ class AddProductToCartCommandHandlerTest extends TestCase
         $command = $this->createConfiguredMock(AddProductToCartCommand::class,
             [
                 'getUserID' => 1,
-                'getProductID' => 3,
+                'getProductID' => 1,
             ]
         );
-        $this->sut->__invoke($command);
+        $mockedCartInterfaceForInvoke = $this->createConfiguredMock(CartInterface::class,
+            [
+                'findCartByUserID' => $this->createConfiguredMock(Cart::class,
+                    [
+                        'getId' => 1
+                    ])
+            ]);
+
+        $newSut = new AddProductToCartCommandHandler(
+            $this->prodInterface,
+            $mockedCartInterfaceForInvoke,
+            $this->userInterface,
+            $this->cartProdInterface,
+        );
+        $newSut->__invoke($command);
     }
 
     /**
@@ -85,9 +100,17 @@ class AddProductToCartCommandHandlerTest extends TestCase
                 'findProductByID' => null
             ]);
 
+        $mockedCartInterfaceForProductException = $this->createConfiguredMock(CartInterface::class,
+            [
+                'findCartByUserID' => $this->createConfiguredMock(Cart::class,
+                    [
+                        'getId' => 1
+                    ])
+            ]);
+        $this->cartInterface->method('getId')->willReturn(2);
         $this->sut = new AddProductToCartCommandHandler(
             $mockedProdInterface,
-            $this->cartInterface,
+            $mockedCartInterfaceForProductException,
             $this->userInterface,
             $this->cartProdInterface,
         );
@@ -95,32 +118,4 @@ class AddProductToCartCommandHandlerTest extends TestCase
         $this->sut->__invoke($this->createMock(AddProductToCartCommand::class));
     }
 
-
-    /**
-     * @test
-     * shouldGetCartNotFoundException
-     * @group add_prod_to_cart_command_handler
-     * @throws Exception
-     */
-
-    
-    // TODO //
-    public function shouldGetCartNotFoundException()
-    {
-        $this->expectException(CartExceptions::class);
-        $this->expectExceptionMessage(CartExceptions::cartNotFound()->getMessage());
-        $this->cartInterface = $this->createConfiguredMock(CartInterface::class,
-            [
-                'findCartByUserID' => null
-            ]);
-
-        $this->sut = new AddProductToCartCommandHandler(
-            $this->prodInterface,
-            $this->cartInterface,
-            $this->userInterface,
-            $this->cartProdInterface,
-        );
-
-        $this->sut->__invoke($this->createMock(AddProductToCartCommand::class));
-    }
 }

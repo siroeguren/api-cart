@@ -11,4 +11,6 @@ interface CartInterface
     public function findCartByID($idCart): ?Cart;
 
     public function findCartByUserID($idUser): ?Cart;
+
+    public function getId(): int;
 }
