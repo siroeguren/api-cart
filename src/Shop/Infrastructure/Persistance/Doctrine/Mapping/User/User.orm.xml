@@ -9,7 +9,7 @@
             <generator strategy="AUTO"/>
         </id>
         <field name="name" type="string" length="255"/>
-        <field name="email" type="string" length="255"/>
-        <field name="password" type="string" length="255"/>
+        <embedded name="email" class="App\Shop\Domain\User\EmailVO" use-column-prefix="false"/>
+        <embedded name="password" class="App\Shop\Domain\User\PasswordVO" use-column-prefix="false"/>
     </entity>
 </doctrine-mapping>

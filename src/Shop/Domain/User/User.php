@@ -3,13 +3,10 @@
 namespace App\Shop\Domain\User;
 
 
-use App\Shop\Domain\User\VOs\EmaiLVO;
-use App\Shop\Domain\User\VOs\PassVO;
-
 class User
 {
     // Constructor
-    public function __construct(string $name, EmailVO $email, PassVO $password)
+    public function __construct(string $name, EmailVO $email, PasswordVO $password)
     {
         $this->name = $name;
         $this->email = $email;
@@ -26,7 +23,7 @@ class User
     private EmailVO $email;
 
 
-    private PassVO $password;
+    private PasswordVO $password;
 
 
     public function getId(): ?int
@@ -54,12 +51,12 @@ class User
         $this->email = $email;
     }
 
-    public function getPassword(): PassVO
+    public function getPassword(): PasswordVO
     {
         return $this->password;
     }
 
-    public function setPassword(PassVO $password): void
+    public function setPassword(PasswordVO $password): void
     {
         $this->password = $password;
     }

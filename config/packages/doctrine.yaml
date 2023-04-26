@@ -31,7 +31,7 @@ doctrine:
         type: xml
         dir: '%kernel.project_dir%/src/Shop/Infrastructure/Persistance/Doctrine/Mapping/Product/PriceVO'
         prefix: 'App\Shop\Domain\Product\PriceVO'
-
+  
 when@test:
   doctrine:
     dbal:

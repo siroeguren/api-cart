@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Shop\Domain\User\VOs;
+namespace App\Shop\Domain\User;
 
 
-use App\Shop\Domain\User\UserExceptions;
-
-class PassVO
+class PasswordVO
 {
     private string $password;
 

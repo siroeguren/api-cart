@@ -2,9 +2,9 @@
 
 namespace App\Tests\Shop\Domain\User;
 
+use App\Shop\Domain\User\EmailVO;
+use App\Shop\Domain\User\PasswordVO;
 use App\Shop\Domain\User\User;
-use App\Shop\Domain\User\VOs\EmailVO;
-use App\Shop\Domain\User\VOs\PassVO;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -12,13 +12,13 @@ class UserTest extends TestCase
 {
     private User $sut;
 
-    private PassVO|MockObject $passVO;
-    private EmailVO|MockObject $emaiLVO;
+    private PasswordVO|MockObject $passVO;
+    private EmailVO|MockObject $emailVO;
 
     protected function setUp(): void
     {
-        $email = $this->emaiLVO = $this->createMock(EmaiLVO::class);
-        $pass = $this->passVO = $this->createMock(PassVO::class);
+        $email = $this->emailVO = $this->createMock(EmaiLVO::class);
+        $pass = $this->passVO = $this->createMock(PasswordVO::class);
 
         $this->sut = new User('user2', email: $email, password: $pass);
     }
